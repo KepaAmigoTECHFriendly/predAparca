@@ -270,6 +270,7 @@ prediccion_plaza_aparcamiento<- function(){
     datos_normalizados <- na.omit(datos_normalizados)
 
     for(i in 1:nrow(datos_normalizados)){
+      print(datos_normalizados$minutos[i] )
       if(datos_normalizados$minutos[i] >= 0 && datos_normalizados$minutos[i] <=15){
         datos_normalizados$minutos[i] <- 1
       }else if(datos_normalizados$minutos[i] > 15 && datos_normalizados$minutos[i] <=30){
