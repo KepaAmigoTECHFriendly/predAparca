@@ -9,7 +9,6 @@
 #' @import httr
 #' jsonlite
 #' dplyr
-#' tidyverse
 #' lubridate
 #' ordinal
 #' caret
