@@ -44,10 +44,10 @@ prediccion_plaza_aparcamiento<- function(){
   secuencia_fechas <- seq.Date((Sys.Date() -365),Sys.Date(),30)
   secuencia_fechas <- c(secuencia_fechas, Sys.Date())
 
+
   # TEMPERATURA
   DF_TEMP <- data.frame()
   for(i in 1:(length(secuencia_fechas)-1)){
-    print(i)
     meteo_spot <- "METEOTOSEC01S01"
 
     endpoint_get_parking <- paste(URL_base, meteo_spot,"/attrs/temperature?from=",secuencia_fechas[i],"%2000%3A00%3A00&to=", secuencia_fechas[i+1],"%2000%3A00%3A00&limit=",sep = "")
@@ -69,7 +69,6 @@ prediccion_plaza_aparcamiento<- function(){
   # PRECIPITACIÓN
   DF_PREC <- data.frame()
   for(i in 1:(length(secuencia_fechas)-1)){
-    print(i)
     meteo_spot <- "METEOTOSEC01S06"
 
     endpoint_get_parking <- paste(URL_base, meteo_spot,"/attrs/precipitation?from=",secuencia_fechas[i],"%2000%3A00%3A00&to=", secuencia_fechas[i+1],"%2000%3A00%3A00&limit=",sep = "")
@@ -92,7 +91,7 @@ prediccion_plaza_aparcamiento<- function(){
   # TEMPERATURA
   DF_TEMP <- DF_TEMP[,c(2,3)]
   DF_TEMP <- unique(DF_TEMP)
-  DF_TEMP$createdAt <- as_datetime(DF_TEMP$createdAt, tz = 'Europe/Brussels')
+  DF_TEMP$createdAt <- as_datetime(as.character(DF_TEMP$createdAt), tz = 'Europe/Brussels')
 
   DF_TEMP$createdAt <- as.POSIXct(DF_TEMP$createdAt, format="%Y-%m-%d %H:%M:%S")  # Se evita normalizar la fecha
   DF_TEMP$hora <- format(DF_TEMP$createdAt, format = "%H:%M:%S")
@@ -124,7 +123,7 @@ prediccion_plaza_aparcamiento<- function(){
   # PRECIPITACIÓN
   DF_PREC <- DF_PREC[,c(2,3)]
   DF_PREC <- unique(DF_PREC)
-  DF_PREC$createdAt <- as_datetime(DF_PREC$createdAt, tz = 'Europe/Brussels')
+  DF_PREC$createdAt <- as_datetime(as.character(DF_PREC$createdAt), tz = 'Europe/Brussels')
 
   DF_PREC$createdAt <- as.POSIXct(DF_PREC$createdAt, format="%Y-%m-%d %H:%M:%S")  # Se evita normalizar la fecha
   DF_PREC$hora <- format(DF_PREC$createdAt, format = "%H:%M:%S")
@@ -219,8 +218,8 @@ prediccion_plaza_aparcamiento<- function(){
     df <- do.call(rbind.data.frame, df)
     colnames(df) <- c("ts_muestra","valor","ts_creacion")
     #Paso a hora local
-    df$ts_muestra <- as_datetime(df$ts_muestra, tz = 'Europe/Brussels')
-    df$ts_creacion <- as_datetime(df$ts_creacion, tz = 'Europe/Brussels')
+    df$ts_muestra <- as_datetime(as.character(df$ts_muestra), tz = 'Europe/Brussels')
+    df$ts_creacion <- as_datetime(as.character(df$ts_creacion), tz = 'Europe/Brussels')
 
     df_parking <- df
 
@@ -231,8 +230,8 @@ prediccion_plaza_aparcamiento<- function(){
     #----------------------------------------------------------------------------------------------------------------------------------------
     # 1) DF PARKING
     df_prediccion <- df_parking
-    df_prediccion$valor[df_prediccion$valor != "LIBRE"] <- 1
-    df_prediccion$valor[df_prediccion$valor == "LIBRE"] <- 0
+    df_prediccion$valor[as.character(df_prediccion$valor) != "LIBRE"] <- 1
+    df_prediccion$valor[as.character(df_prediccion$valor) == "LIBRE"] <- 0
 
 
 
