@@ -21,6 +21,7 @@
 prediccion_plaza_aparcamiento<- function(){
 
 
+
   #----------------------------------------------------------------------------------------------------------------------------------------
   # VARIABLES INICIO
   #----------------------------------------------------------------------------------------------------------------------------------------
@@ -43,7 +44,6 @@ prediccion_plaza_aparcamiento<- function(){
 
   secuencia_fechas <- seq.Date((Sys.Date() -365),Sys.Date(),30)
   secuencia_fechas <- c(secuencia_fechas, Sys.Date())
-
 
   # TEMPERATURA
   DF_TEMP <- data.frame()
@@ -230,8 +230,9 @@ prediccion_plaza_aparcamiento<- function(){
     #----------------------------------------------------------------------------------------------------------------------------------------
     # 1) DF PARKING
     df_prediccion <- df_parking
-    df_prediccion$valor[as.character(df_prediccion$valor) != "LIBRE"] <- 1
-    df_prediccion$valor[as.character(df_prediccion$valor) == "LIBRE"] <- 0
+    df_prediccion$valor <- as.character(df_prediccion$valor)
+    df_prediccion$valor[df_prediccion$valor != "LIBRE"] <- 1
+    df_prediccion$valor[df_prediccion$valor == "LIBRE"] <- 0
 
 
 
@@ -268,10 +269,7 @@ prediccion_plaza_aparcamiento<- function(){
     datos_normalizados$minutos <- minute(datos_normalizados$ts_muestra)
     datos_normalizados <- na.omit(datos_normalizados)
 
-    print(head(datos_normalizados,5))
-
     for(i in 1:nrow(datos_normalizados)){
-
       if(datos_normalizados$minutos[i] >= 0 && datos_normalizados$minutos[i] <=15){
         datos_normalizados$minutos[i] <- 1
       }else if(datos_normalizados$minutos[i] > 15 && datos_normalizados$minutos[i] <=30){
@@ -433,7 +431,6 @@ prediccion_plaza_aparcamiento<- function(){
     minutos <- rep(0,10)
     mes <- rep(0,10)
     for(i in 1:length(hora_categorizada)){
-      print(i)
       if(i == 1){
         if(datos_normalizados_prediccion$minutos[i] == 2){
           minutos[i] <- 1
